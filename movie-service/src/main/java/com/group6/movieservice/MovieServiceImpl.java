@@ -1,11 +1,13 @@
 package com.group6.movieservice;
 
 import com.group6.movieservice.exceptions.MovieNotFoundException;
+import com.group6.movieservice.models.Director;
 import com.group6.movieservice.models.Movie;
 import com.group6.movieservice.repositories.MovieRepository;
 import com.group6.movieservice.serializers.ResponseMessageDTO;
 import com.group6.movieservice.serializers.MovieRequestDTO;
 import com.group6.movieservice.serializers.MovieResponseDTO;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,7 +24,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Slf4j
 public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;

@@ -1,10 +1,10 @@
 package com.group6.movieservice.serializers;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class CastDTO {

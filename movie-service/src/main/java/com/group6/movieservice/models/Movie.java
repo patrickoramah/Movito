@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -29,10 +29,10 @@ public class Movie {
     private Date releaseDate;
     private int views = 0;
     private double rating = 0.0;
-    @ManyToMany
+    @OneToMany(mappedBy="movie")
     @ToString.Exclude
     private Set<Director> directors;
-    @ManyToMany
+    @OneToMany(mappedBy="movie")
     @ToString.Exclude
     private Set<Cast> casts;
     @Column(updatable=false)

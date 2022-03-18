@@ -1,16 +1,12 @@
 package com.group6.movieservice.serializers;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class ResponseMessageDTO {
     private String message;
-
-    public ResponseMessageDTO(String message) {
-        this.message = message;
-    }
 }

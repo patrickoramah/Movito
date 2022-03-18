@@ -50,18 +50,6 @@ public class CustomExceptionHandler {
   return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
  }
 
- @ExceptionHandler(BadRequestException.class)
- public final ResponseEntity<ErrorResponse> businessExceptionHandler(BadRequestException ex, WebRequest request) {
-  ErrorResponse error = new ErrorResponse("business_error", ex.getLocalizedMessage());
-  return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
- }
-
- @ExceptionHandler(ConflictException.class)
- public final ResponseEntity<ErrorResponse> conflictExceptionHandler(ConflictException ex, WebRequest request) {
-  ErrorResponse error = new ErrorResponse("conflict_error", ex.getLocalizedMessage());
-  return new ResponseEntity<>(error, HttpStatus.CONFLICT);
- }
-
  @ExceptionHandler(Exception.class)
  public final ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex, WebRequest request) {
   System.out.println(ex.getLocalizedMessage());
