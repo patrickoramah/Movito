@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 
 services:
   serviceregistry:
@@ -7,7 +7,8 @@ services:
     container_name: serviceregistry
     ports:
       - "8761:8761"
-    restart: on-failure
+    healthcheck:
+      test: "exit 0"
 
   cloudgateway:
     build: cloud-gateway/
@@ -17,9 +18,7 @@ services:
       - "9000:9000"
     depends_on:
       serviceregistry:
-        condition: service_started
-    links:
-      - serviceregistry
+        condition: service_healthy
     restart: on-failure
 
   movieservice:
@@ -29,13 +28,23 @@ services:
     ports:
       - "9001:9001"
     depends_on:
-      serviceregistry:
-        condition: service_started
       movieservicedb:
+        condition: service_healthy  
+      serviceregistry:
         condition: service_healthy
-    links:
-      - serviceregistry
     restart: on-failure
+
+  movieservicedb:
+    image: postgres
+    container_name: movieservicedb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=group6
+      - POSTGRES_DB=movies
+    volumes:
+      - movieservicedbdata:/var/lib/postgresql/data
+    healthcheck:
+       test: "exit 0"
 
   reviewservice:
     build: review-service/
@@ -44,25 +53,11 @@ services:
     ports:
       - "9002:9002"
     depends_on:
-      serviceregistry:
-        condition: service_started
       reviewservicedb:
         condition: service_healthy
-    links:
-      - serviceregistry
+      serviceregistry:
+        condition: service_healthy
     restart: on-failure    
-
-  movieservicedb:
-    image: postgres
-    container_name: movieservicedb
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=group6
-    volumes:
-      - movieservicedbdata:/var/lib/postgresql/data
-    healthcheck:
-      test: "exit 0"
-    restart: always
 
   reviewservicedb:
     image: postgres
@@ -70,11 +65,11 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=group6
+      - POSTGRES_DB=reviews
     volumes:
       - reviewservicedbdata:/var/lib/postgresql/data
     healthcheck:
-      test: "exit 0"
-    restart: always   
+       test: "exit 0"
 
 volumes:
   movieservicedbdata:

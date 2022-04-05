@@ -7,7 +7,7 @@ RUN mvn verify clean --fail-never
 
 COPY . .
 
-RUN mvn clean install
+RUN mvn clean install -DskipTests
 
 FROM openjdk:17-alpine AS run
 COPY --from=build /app/target/*.jar app.jar

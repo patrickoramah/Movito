@@ -13,7 +13,7 @@ spring:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
       ddl-auto: update
   datasource:
-    url: jdbc:postgresql://movieservicedb:5432/postgres
+    url: jdbc:postgresql://movieservicedb:5432/movies
     username: postgres
     password: group6
 
