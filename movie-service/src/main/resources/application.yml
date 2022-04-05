@@ -11,17 +11,15 @@ spring:
     hibernate:
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
-      ddl-auto: create-drop
+      ddl-auto: update
   datasource:
-    url: jdbc:postgresql://localhost:5432/movie_service_db
-    username:
-    password:
+    url: jdbc:postgresql://movieservicedb:5432/postgres
+    username: postgres
+    password: group6
 
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka/
-  instance:
-    hostname: localhost
+      defaultZone: http://serviceregistry:8761/eureka/

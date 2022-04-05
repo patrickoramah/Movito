@@ -20,7 +20,7 @@ public class Director {
     @GeneratedValue
     private UUID id;
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private Movie movie;
     private String name;
     @Column(updatable=false)

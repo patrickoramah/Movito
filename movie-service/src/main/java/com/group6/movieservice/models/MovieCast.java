@@ -15,12 +15,12 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-public class Cast {
+public class MovieCast {
     @Id
     @GeneratedValue
     private UUID id;
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private Movie movie;
     private String screenName;
     private String playedBy;
@@ -34,8 +34,8 @@ public class Cast {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Cast cast = (Cast) o;
-        return id != null && Objects.equals(id, cast.id);
+        MovieCast movieCast = (MovieCast) o;
+        return id != null && Objects.equals(id, movieCast.id);
     }
 
     @Override

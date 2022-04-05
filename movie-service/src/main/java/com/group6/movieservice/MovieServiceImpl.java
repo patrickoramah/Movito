@@ -1,14 +1,13 @@
 package com.group6.movieservice;
 
 import com.group6.movieservice.exceptions.MovieNotFoundException;
-import com.group6.movieservice.models.Director;
 import com.group6.movieservice.models.Movie;
 import com.group6.movieservice.repositories.MovieRepository;
 import com.group6.movieservice.serializers.ResponseMessageDTO;
 import com.group6.movieservice.serializers.MovieRequestDTO;
 import com.group6.movieservice.serializers.MovieResponseDTO;
+import com.group6.movieservice.serializers.UpdateRatingDTO;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -46,6 +45,14 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public Page<MovieResponseDTO> searchMovies(int page, int size, String query) {
+        if (page < 1)
+            page = 1;
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("dateCreated").descending());
+        return movieRepository.findAllByTitleLike(pageable, query).map(entity -> new ModelMapper().map(entity, MovieResponseDTO.class));
+    }
+
+    @Override
     public MovieResponseDTO updateMovie(UUID movieId, MovieRequestDTO request) {
         Optional<Movie> movie = movieRepository.findById(movieId);
         if (movie.isEmpty())
@@ -70,6 +77,16 @@ public class MovieServiceImpl implements MovieService {
             throw new MovieNotFoundException("Movie not found");
         movieRepository.delete(movie.get());
         return new ResponseMessageDTO("Movie deleted successfully");
+    }
+
+    @Override
+    public ResponseMessageDTO updateRating(UUID movieId, UpdateRatingDTO request) {
+        Optional<Movie> movie = movieRepository.findById(movieId);
+        if (movie.isEmpty())
+            throw new MovieNotFoundException("Movie not found");
+        movie.get().setRating((movie.get().getRating() + request.getRating()) / 2);
+        movieRepository.save(movie.get());
+        return new ResponseMessageDTO("Rating saved successfully");
     }
 
     @Override

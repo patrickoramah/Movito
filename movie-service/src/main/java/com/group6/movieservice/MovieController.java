@@ -3,6 +3,7 @@ package com.group6.movieservice;
 import com.group6.movieservice.serializers.ResponseMessageDTO;
 import com.group6.movieservice.serializers.MovieRequestDTO;
 import com.group6.movieservice.serializers.MovieResponseDTO;
+import com.group6.movieservice.serializers.UpdateRatingDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,49 +21,55 @@ public class MovieController {
     private final MovieService movieService;
 
     @PostMapping(value="{movieId}/upload-poster", consumes = "multipart/form-data")
-    // @ApiOperation(value="Create poster")
     public ResponseEntity<ResponseMessageDTO> uploadPoster(@PathVariable(value="movieId") UUID movieId, @RequestPart("file") MultipartFile file) {
         return ResponseEntity.ok(movieService.uploadPoster(movieId, file));
     }
 
     @PostMapping("")
-    // @ApiOperation(value="Create a movie")
     public ResponseEntity<MovieResponseDTO> createMovie(@RequestBody MovieRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(movieService.createMovie(request));
     }
 
     @PutMapping("{movieId}")
-//    @ApiOperation(value="Update a movie")
     public ResponseEntity<MovieResponseDTO> updateMovie(@PathVariable(value="movieId") UUID movieId, @RequestBody MovieRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(movieService.updateMovie(movieId, request));
     }
 
+    @GetMapping("search")
+    public ResponseEntity<Page<MovieResponseDTO>> searchMovies(@RequestParam(value="page") int page,
+                                                               @RequestParam(value="size") int size,
+                                                               @RequestParam(value="query") String query) {
+        return ResponseEntity.ok(movieService.searchMovies(page, size, query));
+    }
+
+
     @GetMapping("{movieId}")
-//    @ApiOperation(value="Get single movie")
     public ResponseEntity<MovieResponseDTO> getSingleMovie(@PathVariable(value="movieId") UUID movieId) {
         return ResponseEntity.ok(movieService.getSingleMovie(movieId));
     }
 
     @DeleteMapping("{movieId}")
-//    @ApiOperation(value="Delete movie")
     public ResponseEntity<ResponseMessageDTO> deleteMovie(@PathVariable(value="movieId") UUID movieId) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(movieService.deleteMovie(movieId));
     }
 
+    @PatchMapping("{movieId}/rate")
+    public ResponseEntity<ResponseMessageDTO> updateRating(@PathVariable(value="movieId") UUID movieId,
+                                                           @RequestBody UpdateRatingDTO request) {
+        return ResponseEntity.ok(movieService.updateRating(movieId, request));
+    }
+
     @GetMapping("")
-//    @ApiOperation(value="Get all movies")
     public ResponseEntity<Page<MovieResponseDTO>> getSingleMovie(@RequestParam(value="page") int page, @RequestParam(value="size") int size) {
         return ResponseEntity.ok(movieService.getAllMovies(page, size));
     }
 
     @GetMapping("popular")
-//    @ApiOperation(value="Get popular movies")
     public ResponseEntity<List<MovieResponseDTO>> getPopularMovies() {
         return ResponseEntity.ok(movieService.getPopularMovies());
     }
 
     @GetMapping("top-rated")
-//    @ApiOperation(value="Get top rated movies")
     public ResponseEntity<List<MovieResponseDTO>> topRatedMovies() {
         return ResponseEntity.ok(movieService.topRatedMovies());
     }

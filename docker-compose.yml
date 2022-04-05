@@ -1,0 +1,81 @@
+version: "3"
+
+services:
+  serviceregistry:
+    build: service-registry/
+    image: group6/service-registry
+    container_name: serviceregistry
+    ports:
+      - "8761:8761"
+    restart: on-failure
+
+  cloudgateway:
+    build: cloud-gateway/
+    image: group6/cloud-gateway
+    container_name: cloudgateway
+    ports:
+      - "9000:9000"
+    depends_on:
+      serviceregistry:
+        condition: service_started
+    links:
+      - serviceregistry
+    restart: on-failure
+
+  movieservice:
+    build: movie-service/
+    image: group6/movie-service
+    container_name: movieservice
+    ports:
+      - "9001:9001"
+    depends_on:
+      serviceregistry:
+        condition: service_started
+      movieservicedb:
+        condition: service_healthy
+    links:
+      - serviceregistry
+    restart: on-failure
+
+  reviewservice:
+    build: review-service/
+    image: group6/review-service
+    container_name: reviewservice
+    ports:
+      - "9002:9002"
+    depends_on:
+      serviceregistry:
+        condition: service_started
+      reviewservicedb:
+        condition: service_healthy
+    links:
+      - serviceregistry
+    restart: on-failure    
+
+  movieservicedb:
+    image: postgres
+    container_name: movieservicedb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=group6
+    volumes:
+      - movieservicedbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: "exit 0"
+    restart: always
+
+  reviewservicedb:
+    image: postgres
+    container_name: reviewservicedb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=group6
+    volumes:
+      - reviewservicedbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: "exit 0"
+    restart: always   
+
+volumes:
+  movieservicedbdata:
+  reviewservicedbdata:

@@ -34,7 +34,7 @@ public class Movie {
     private Set<Director> directors;
     @OneToMany(mappedBy="movie")
     @ToString.Exclude
-    private Set<Cast> casts;
+    private Set<MovieCast> movieCasts;
     @Column(updatable=false)
     @CreationTimestamp
     private Date dateCreated;
