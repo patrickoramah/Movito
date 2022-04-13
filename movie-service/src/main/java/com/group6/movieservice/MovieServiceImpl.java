@@ -49,7 +49,7 @@ public class MovieServiceImpl implements MovieService {
         if (page < 1)
             page = 1;
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("dateCreated").descending());
-        return movieRepository.findAllByTitleLike(pageable, query).map(entity -> new ModelMapper().map(entity, MovieResponseDTO.class));
+        return movieRepository.findAllByTitleIgnoreCaseLike(pageable, query).map(entity -> new ModelMapper().map(entity, MovieResponseDTO.class));
     }
 
     @Override

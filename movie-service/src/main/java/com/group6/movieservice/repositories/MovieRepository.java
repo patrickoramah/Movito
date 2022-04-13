@@ -13,5 +13,5 @@ import java.util.UUID;
 public interface MovieRepository extends JpaRepository<Movie, UUID> {
     List<Movie> findTop10ByOrderByViewsDesc();
     List<Movie> findTop10ByOrderByRatingDesc();
-    Page<Movie> findAllByTitleLike(Pageable pageable, String query);
+    Page<Movie> findAllByTitleIgnoreCaseLike(Pageable pageable, String query);
 }
